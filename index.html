@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Menú Interactivo - Rama Judicial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #002775;
+            --primary-medium: #084187;
+            --primary-light: #2a6fd6;
+            --accent-blue: #95EAFF;
+            --accent-yellow: #FFC800;
+            --accent-red: #FF0000;
+            --text-light: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            background-image: url('images/FONDO.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.15;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 5%;
+            background-color: var(--primary-dark);
+            margin-bottom: 40px;
+            position: relative;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            flex-wrap: nowrap;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            align-items: center;
+            flex-wrap: nowrap;
+        }
+
+        .logo {
+            height: 100px;
+            max-width: 350px;
+            object-fit: contain;
+            flex-shrink: 1;
+        }
+
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0 5% 40px;
+            position: relative;
+            margin-top: -20px;
+        }
+
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 20px;
+        }
+
+        .btn {
+            background-color: var(--primary-medium);
+            color: white;
+            border: none;
+            padding: 20px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+            text-align: center;
+            position: relative;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+            background-color: var(--primary-light);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-video {
+            background-color: var(--primary-medium);
+        }
+
+        .btn-video:hover {
+            background-color: var(--primary-light);
+        }
+
+        .btn-website {
+            background-color: var(--accent-yellow);
+            color: #333;
+        }
+
+        .btn-website:hover {
+            background-color: #FFD700;
+            color: #333;
+        }
+
+        .btn i {
+            margin-right: 12px;
+            font-size: 1.4rem;
+        }
+
+        /* Estilos para redes sociales */
+        .social-media-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 20px auto 0;
+        }
+
+        .social-media {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            padding: 20px 0;
+        }
+
+        .social-icon {
+            width: 50px;
+            height: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            transform: scale(1.15);
+            filter: brightness(1.1);
+        }
+
+        /* Contador de clicks */
+        .click-counter {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--primary-dark);
+            padding: 20px;
+            border-radius: 10px;
+            width: 95%;
+            max-width: 1000px;
+            position: relative;
+            border: 2px solid var(--primary-light);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        footer {
+            padding: 20px;
+            font-weight: 300;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            background-color: var(--primary-dark);
+            margin-top: auto;
+            position: relative;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .buttons-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .logo {
+                max-width: 280px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .header {
+                padding: 20px 5%;
+            }
+
+            .logo {
+                height: 90px;
+                max-width: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .buttons-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .logo {
+                height: 80px;
+                max-width: 220px;
+            }
+
+            .btn {
+                min-height: 90px;
+                padding: 18px;
+            }
+
+            .social-media {
+                gap: 25px;
+                margin-top: 25px;
+            }
+
+            .social-icon {
+                width: 45px;
+                height: 45px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .logo {
+                height: 70px;
+                max-width: 180px;
+            }
+
+            .btn {
+                min-height: 80px;
+                padding: 15px;
+                font-size: 1rem;
+            }
+
+            .main-container {
+                margin-top: -15px;
+                padding-bottom: 30px;
+            }
+
+            .social-media {
+                gap: 20px;
+                margin-top: 20px;
+                flex-wrap: wrap;
+                padding: 15px 0;
+            }
+
+            .social-icon {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .logo {
+                max-width: 150px;
+                height: 60px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <img src="images/CSJ_BLANCO.png" alt="Consejo Superior de la Judicatura" class="logo">
+            <img src="images/EJRLB_BLANCO.png" alt="Escuela Judicial Rodrigo Lara Bonilla" class="logo">
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="buttons-grid">
+            <button class="btn btn-video" onclick="openModal('vDOLxwe8vNg'); trackClick('Video Institucional')">
+                <i class="fas fa-play"></i> Video Institucional
+            </button>
+
+            <button class="btn btn-website"
+                onclick="openWebsite('https://escuelajudicial.ramajudicial.gov.co/oferta-academica'); trackClick('Oferta Académica')">
+                <i class="fas fa-external-link-alt"></i> Oferta Académica
+            </button>
+
+            <button class="btn btn-video" onclick="openModal('gAeUS_SmyXk'); trackClick('Inscripción SGA')">
+                <i class="fas fa-play"></i> Cómo inscribirse al Sistema de Gestión Académica - SGA?
+            </button>
+
+            <button class="btn btn-video" onclick="openModal('JGwWNGJdvx8'); trackClick('Videoconferencias')">
+                <i class="fas fa-play"></i> Videoconferencias
+            </button>
+
+            <button class="btn btn-video" onclick="openModal('4_u_j-iKfYE'); trackClick('Red de Formadores')">
+                <i class="fas fa-play"></i> Red de Formadores
+            </button>
+
+            <button class="btn btn-website"
+                onclick="openWebsite('https://escuelajudicial.ramajudicial.gov.co/'); trackClick('Web Escuela')">
+                <i class="fas fa-external-link-alt"></i> Web Escuela Judicial
+            </button>
+        </div>
+
+        <!-- Redes Sociales -->
+        <div class="social-media-container">
+            <div class="social-media">
+                <a href="https://www.youtube.com/user/EJRLB" target="_blank" rel="noopener noreferrer">
+                    <img src="images/iconos/youtube.png" alt="YouTube" class="social-icon">
+                </a>
+                <a href="https://www.facebook.com/escuelajudicialrlb/" target="_blank" rel="noopener noreferrer">
+                    <img src="images/iconos/facebook.png" alt="Facebook" class="social-icon">
+                </a>
+                <a href="https://x.com/Ejrlbnet" target="_blank" rel="noopener noreferrer">
+                    <img src="images/iconos/twitter.png" alt="Twitter" class="social-icon">
+                </a>
+                <a href="https://www.instagram.com/escuelajudicial_rlb/" target="_blank" rel="noopener noreferrer">
+                    <img src="images/iconos/instagram.png" alt="Instagram" class="social-icon">
+                </a>
+                <a href="https://open.spotify.com/show/50ljgYiXT0OznL4VmtouHa" target="_blank"
+                    rel="noopener noreferrer">
+                    <img src="images/iconos/spotify.png" alt="Spotify" class="social-icon">
+                </a>
+            </div>
+        </div>
+
+        <!-- Contador de clicks -->
+        <div class="click-counter" id="clickCounter">
+            Clics totales: 001000
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div class="modal" id="videoModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <div class="video-container">
+                <iframe id="videoFrame" src="" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        © 2025 Escuela Judicial Rodrigo Lara Bonilla - Consejo Superior de la Judicatura - República de Colombia
+    </footer>
+
+    <script>
+        // Contador de clicks
+        let totalClicks = 0;
+        const clickCounter = document.getElementById('clickCounter');
+
+        function trackClick(buttonName) {
+            totalClicks++;
+            clickCounter.textContent = `Clics totales: ${totalClicks}`;
+
+            // Guardar en localStorage para persistencia
+            localStorage.setItem('totalClicks', totalClicks);
+
+            // Aquí podrías enviar esta información a un servidor si es necesario
+            console.log(`Click en: ${buttonName}`);
+        }
+
+        // Cargar contador desde localStorage al iniciar
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedClicks = localStorage.getItem('totalClicks');
+            if (savedClicks) {
+                totalClicks = parseInt(savedClicks);
+                clickCounter.textContent = `Clics totales: ${totalClicks}`;
+            }
+
+            enterFullscreen();
+        });
+
+        // Funciones existentes
+        function openModal(videoId) {
+            const modal = document.getElementById('videoModal');
+            const iframe = document.getElementById('videoFrame');
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&rel=0`;
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('videoModal');
+            const iframe = document.getElementById('videoFrame');
+            iframe.src = '';
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function openWebsite(url) {
+            window.open(url, '_blank', 'noopener,noreferrer');
+        }
+
+        function enterFullscreen() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) elem.requestFullscreen().catch(err => {
+                console.log(`Error attempting to enable fullscreen: ${err.message}`);
+            });
+            else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+            else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+        }
+
+        window.onclick = function (event) {
+            const modal = document.getElementById('videoModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement) {
+                setTimeout(enterFullscreen, 1000);
+            }
+        });
+    </script>
+</body>
+
+</html>
